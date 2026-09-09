@@ -57,66 +57,58 @@ export const StatsPanel: React.FC = () => {
         <div className="w-full max-w-5xl pointer-events-auto relative">
           {/* 오리지널 대시보드 통계 패널 박스 (투명 배경 플로팅 아일랜드 스타일) */}
           <div className="relative rounded-xl border border-zinc-700/70 bg-gradient-to-b from-zinc-800/95 to-zinc-900/95 shadow-[0_12px_32px_rgba(0,0,0,0.7)] backdrop-blur-xl px-3.5 py-1.5 space-y-1">
-            {/* 우측 상단 닫기 (X) 버튼 */}
+            {/* 우측 상단 플로팅 닫기 (X) 버튼 */}
             <button
               onClick={toggleStatsPanel}
-              className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 p-1 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-700/70 transition-colors z-20"
+              className="absolute -top-2.5 -right-2.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-white border border-zinc-600 rounded-full p-1 shadow-lg transition-all z-30 cursor-pointer"
               title="이수 현황 대시보드 닫기"
               aria-label="닫기"
             >
-              <X size={15} />
+              <X size={13} />
             </button>
 
-            {/* 1단: 교과목 이수 현황 (6컬럼 균등 분할) */}
+            {/* 1단: 교과목 이수 현황 (6컬럼 균등 분할 - 높이 및 비율 완벽 일원화) */}
             <div className="grid grid-cols-6 w-full text-center divide-x divide-zinc-700/70 items-center">
               {/* 1. 전공필수 */}
               <div className="flex flex-col items-center justify-center px-1">
                 <span className="text-[11px] font-semibold text-zinc-400 leading-none">전공필수</span>
-                <div className="mt-0.5">
-                  <span className="text-xs sm:text-sm font-bold text-white font-mono leading-tight whitespace-nowrap">
-                    {stats.credits.JP} / {DEFAULT_CREDIT_REQUIREMENTS.JP}
-                  </span>
+                <div className="flex items-center justify-center h-5 mt-1 font-mono text-xs sm:text-sm font-bold leading-none text-white whitespace-nowrap">
+                  {stats.credits.JP} / {DEFAULT_CREDIT_REQUIREMENTS.JP}
                 </div>
               </div>
 
               {/* 2. 전공선택 */}
               <div className="flex flex-col items-center justify-center px-1">
                 <span className="text-[11px] font-semibold text-zinc-400 leading-none">전공선택</span>
-                <div className="mt-0.5">
-                  <span className="text-xs sm:text-sm font-bold text-white font-mono leading-tight whitespace-nowrap">
-                    {stats.credits.JS} / {DEFAULT_CREDIT_REQUIREMENTS.JS}
-                  </span>
+                <div className="flex items-center justify-center h-5 mt-1 font-mono text-xs sm:text-sm font-bold leading-none text-white whitespace-nowrap">
+                  {stats.credits.JS} / {DEFAULT_CREDIT_REQUIREMENTS.JS}
                 </div>
               </div>
 
               {/* 3. 자유선택 */}
               <div className="flex flex-col items-center justify-center px-1">
                 <span className="text-[11px] font-semibold text-zinc-400 leading-none">자유선택</span>
-                <div className="mt-0.5">
-                  <span className="text-xs sm:text-sm font-bold text-white font-mono leading-tight whitespace-nowrap">
-                    {stats.credits.Jas} / {DEFAULT_CREDIT_REQUIREMENTS.Jas}
-                  </span>
+                <div className="flex items-center justify-center h-5 mt-1 font-mono text-xs sm:text-sm font-bold leading-none text-white whitespace-nowrap">
+                  {stats.credits.Jas} / {DEFAULT_CREDIT_REQUIREMENTS.Jas}
                 </div>
               </div>
 
               {/* 4. 교양선택 */}
               <div className="flex flex-col items-center justify-center px-1">
                 <span className="text-[11px] font-semibold text-zinc-400 leading-none">교양선택</span>
-                <div className="mt-0.5">
-                  <span className="text-xs sm:text-sm font-bold text-white font-mono leading-tight whitespace-nowrap">
-                    {stats.credits.GS} / {DEFAULT_CREDIT_REQUIREMENTS.GS}
-                  </span>
+                <div className="flex items-center justify-center h-5 mt-1 font-mono text-xs sm:text-sm font-bold leading-none text-white whitespace-nowrap">
+                  {stats.credits.GS} / {DEFAULT_CREDIT_REQUIREMENTS.GS}
                 </div>
               </div>
 
               {/* 5. 영어 / 체육 */}
               <div className="flex flex-col items-center justify-center px-1">
                 <span className="text-[11px] font-semibold text-zinc-400 leading-none">영어 / 체육</span>
-                <div className="flex items-center justify-center mt-0.5 font-mono text-[11px] sm:text-xs font-bold leading-tight whitespace-nowrap tracking-tight">
+                <div className="flex items-center justify-center h-5 mt-1 font-mono text-xs sm:text-sm font-bold leading-none whitespace-nowrap">
                   <span className="text-orange-400">
                     {stats.counts.Eng}/{DEFAULT_REQUIREMENTS.Eng}
                   </span>
-                  <span className="text-zinc-600 mx-1 font-normal text-[10px]">|</span>
+                  <span className="text-zinc-600 mx-1 font-normal text-xs">|</span>
                   <span className="text-teal-400">
                     {stats.counts.PE}/{DEFAULT_REQUIREMENTS.PE}
                   </span>
@@ -124,11 +116,11 @@ export const StatsPanel: React.FC = () => {
               </div>
 
               {/* 6. 총 학점 */}
-              <div className="flex flex-col items-center justify-center px-1 pr-2 sm:pr-0">
+              <div className="flex flex-col items-center justify-center px-1">
                 <span className="text-[11px] font-semibold text-zinc-400 leading-none">총 학점</span>
-                <span className="text-base sm:text-lg font-black font-mono text-postech leading-tight mt-0.5 drop-shadow-[0_0_8px_rgba(255,51,112,0.3)]">
+                <div className="flex items-center justify-center h-5 mt-1 font-mono text-xs sm:text-sm font-black leading-none text-postech drop-shadow-[0_0_8px_rgba(255,51,112,0.3)] whitespace-nowrap">
                   {stats.totalCredits}
-                </span>
+                </div>
               </div>
             </div>
 
