@@ -22,28 +22,30 @@ export const StatsPanel: React.FC = () => {
 
   return (
     <>
-      {/* 1. 우측 하단 플로팅 토글 버튼 (항상 노출되어 접기/펼치기 제어) */}
-      <div className="fixed bottom-3 sm:bottom-4 right-4 sm:right-6 z-50 pointer-events-auto">
-        <button
-          onClick={toggleStatsPanel}
-          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl border shadow-[0_8px_24px_rgba(0,0,0,0.6)] backdrop-blur-md text-xs font-semibold transition-all group ${
-            showStatsPanel
-              ? 'bg-zinc-800 text-white border-zinc-600 shadow-postech/10'
-              : 'bg-zinc-900/95 hover:bg-zinc-800 text-zinc-200 border-zinc-700/90 hover:border-postech'
-          }`}
-          title={showStatsPanel ? '이수 현황 대시보드 접기' : '이수 현황 대시보드 펼치기'}
-        >
-          <BarChart2 size={15} className="text-postech group-hover:scale-110 transition-transform" />
-          <span>이수 현황</span>
-          <span className="px-1.5 py-0.5 text-[10px] font-mono font-bold bg-zinc-800/90 border border-zinc-700 rounded text-postech">
-            {stats.totalCredits}학점
-          </span>
-          {showStatsPanel ? (
-            <ChevronDown size={14} className="text-zinc-400 group-hover:text-white transition-colors" />
-          ) : (
-            <ChevronUp size={14} className="text-zinc-400 group-hover:text-white transition-colors" />
-          )}
-        </button>
+      {/* 1. 플로팅 토글 버튼 (메인 카드 열 max-w-5xl 우측 끝에 정확히 정렬) */}
+      <div className="fixed bottom-3 sm:bottom-4 left-0 right-0 z-50 pointer-events-none px-3">
+        <div className="w-full max-w-5xl mx-auto flex justify-end">
+          <button
+            onClick={toggleStatsPanel}
+            className={`pointer-events-auto flex items-center gap-2 px-3.5 py-2 rounded-xl border shadow-[0_8px_24px_rgba(0,0,0,0.6)] backdrop-blur-md text-xs font-semibold transition-all group ${
+              showStatsPanel
+                ? 'bg-zinc-800 text-white border-zinc-600 shadow-postech/10'
+                : 'bg-zinc-900/95 hover:bg-zinc-800 text-zinc-200 border-zinc-700/90 hover:border-postech'
+            }`}
+            title={showStatsPanel ? '이수 현황 대시보드 접기' : '이수 현황 대시보드 펼치기'}
+          >
+            <BarChart2 size={15} className="text-postech group-hover:scale-110 transition-transform" />
+            <span>이수 현황</span>
+            <span className="px-1.5 py-0.5 text-[10px] font-mono font-bold bg-zinc-800/90 border border-zinc-700 rounded text-postech">
+              {stats.totalCredits}학점
+            </span>
+            {showStatsPanel ? (
+              <ChevronDown size={14} className="text-zinc-400 group-hover:text-white transition-colors" />
+            ) : (
+              <ChevronUp size={14} className="text-zinc-400 group-hover:text-white transition-colors" />
+            )}
+          </button>
+        </div>
       </div>
 
       {/* 2. 하단 슬림 대시보드 패널 (토글에 따라 부드럽게 슬라이드 업/다운) */}
