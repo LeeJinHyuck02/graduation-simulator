@@ -112,13 +112,10 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
                         left: `${(startCol / visibleSemesters.length) * 100}%`,
                         width: `${((Math.max(endCol - startCol + 1, 1)) / visibleSemesters.length) * 100}%`,
                       }}
-                      className={`absolute top-1.5 bottom-1.5 px-2.5 rounded-md flex items-center justify-between text-[11px] font-semibold text-white shadow-sm border cursor-pointer hover:opacity-90 transition-all ${opt.barBg}`}
+                      className={`absolute top-1.5 bottom-1.5 px-2 rounded-md flex items-center justify-center text-[11px] font-semibold text-white shadow-sm border cursor-pointer hover:opacity-90 transition-all ${opt.barBg}`}
                       title={`${act.name} (클릭하여 수정)`}
                     >
-                      <span className="truncate">{act.name}</span>
-                      <span className="text-[10px] opacity-80 pl-1">
-                        {startCol === endCol ? '단기' : `${endCol - startCol + 1}학기`}
-                      </span>
+                      <span className="truncate text-center">{act.name}</span>
                     </div>
                   )}
                 </div>
