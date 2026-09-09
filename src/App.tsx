@@ -69,7 +69,7 @@ export function App() {
 
           {/* 우측: 뷰 및 필터 컨트롤 */}
           <div className="flex-shrink-0">
-            <ViewControls onOpenAddActivity={handleAddActivity} />
+            <ViewControls />
           </div>
         </div>
       </header>

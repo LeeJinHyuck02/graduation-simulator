@@ -1,12 +1,8 @@
 import React from 'react';
 import { usePlannerStore } from '../../store/usePlannerStore';
-import { Eye, EyeOff, Plus, LayoutGrid, CalendarRange } from 'lucide-react';
+import { Eye, EyeOff, LayoutGrid, CalendarRange } from 'lucide-react';
 
-interface ViewControlsProps {
-  onOpenAddActivity: () => void;
-}
-
-export const ViewControls: React.FC<ViewControlsProps> = ({ onOpenAddActivity }) => {
+export const ViewControls: React.FC = () => {
   const {
     showVacations,
     toggleVacations,
@@ -18,59 +14,60 @@ export const ViewControls: React.FC<ViewControlsProps> = ({ onOpenAddActivity })
 
   return (
     <div className="flex items-center gap-2 flex-wrap">
-      {/* 뷰 전환 토글 (과목 플래너 <-> 활동 관리) */}
+      {/* 뷰 전환 토글 (수강 플래너 <-> 비교과 활동 아이콘) */}
       <div className="flex items-center p-0.5 bg-dark-card border border-dark-border rounded-lg">
         <button
           onClick={() => setCurrentView('planner')}
-          className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${
+          className={`p-1.5 rounded-md transition-colors ${
             currentView === 'planner'
               ? 'bg-postech text-white shadow-sm'
               : 'text-zinc-400 hover:text-zinc-200'
           }`}
+          title="수강 플래너"
+          aria-label="수강 플래너"
         >
-          <LayoutGrid size={14} />
-          <span>수강 플래너</span>
+          <LayoutGrid size={16} />
         </button>
         <button
           onClick={() => setCurrentView('activities')}
-          className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${
+          className={`p-1.5 rounded-md transition-colors ${
             currentView === 'activities'
               ? 'bg-postech text-white shadow-sm'
               : 'text-zinc-400 hover:text-zinc-200'
           }`}
+          title="비교과 활동"
+          aria-label="비교과 활동"
         >
-          <CalendarRange size={14} />
-          <span>비교과 활동</span>
+          <CalendarRange size={16} />
         </button>
       </div>
 
       {/* 방학 토글 버튼 */}
       <button
         onClick={toggleVacations}
-        className="flex items-center justify-center gap-1.5 w-[96px] py-1.5 text-xs font-medium bg-dark-card hover:bg-dark-hover text-zinc-300 border border-dark-border rounded-lg transition-colors shrink-0"
-        title="방학 학기 표시 여부"
+        className={`flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium rounded-lg border transition-colors shrink-0 ${
+          showVacations
+            ? 'bg-dark-card hover:bg-dark-hover text-zinc-200 border-dark-border'
+            : 'bg-dark-card/60 hover:bg-dark-card text-zinc-500 border-dark-border/60'
+        }`}
+        title={showVacations ? '방학 숨기기' : '방학 보이기'}
       >
-        {showVacations ? <EyeOff size={14} /> : <Eye size={14} />}
-        <span>{showVacations ? '방학 숨기기' : '방학 보이기'}</span>
+        {showVacations ? <Eye size={14} className="text-zinc-300" /> : <EyeOff size={14} className="text-zinc-500" />}
+        <span>방학</span>
       </button>
 
       {/* 이전 학기 토글 버튼 */}
       <button
         onClick={togglePreviousSemesters}
-        className="flex items-center justify-center gap-1.5 w-[118px] py-1.5 text-xs font-medium bg-dark-card hover:bg-dark-hover text-zinc-300 border border-dark-border rounded-lg transition-colors shrink-0"
-        title="이전 학기(3-1 이전) 표시 여부"
+        className={`flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium rounded-lg border transition-colors shrink-0 ${
+          showPreviousSemesters
+            ? 'bg-dark-card hover:bg-dark-hover text-zinc-200 border-dark-border'
+            : 'bg-dark-card/60 hover:bg-dark-card text-zinc-500 border-dark-border/60'
+        }`}
+        title={showPreviousSemesters ? '이전 학기 숨기기' : '이전 학기 보이기'}
       >
-        {showPreviousSemesters ? <EyeOff size={14} /> : <Eye size={14} />}
-        <span>{showPreviousSemesters ? '이전 학기 숨기기' : '이전 학기 보기'}</span>
-      </button>
-
-      {/* 활동 추가 버튼 */}
-      <button
-        onClick={onOpenAddActivity}
-        className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-zinc-700 hover:bg-zinc-600 text-white rounded-lg transition-colors"
-      >
-        <Plus size={14} />
-        <span>새 활동</span>
+        {showPreviousSemesters ? <Eye size={14} className="text-zinc-300" /> : <EyeOff size={14} className="text-zinc-500" />}
+        <span>이전 학기</span>
       </button>
     </div>
   );

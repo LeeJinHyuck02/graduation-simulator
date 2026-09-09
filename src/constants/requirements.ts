@@ -15,7 +15,7 @@ export const DEFAULT_REQUIREMENTS: GraduationRequirements = {
 export const DEFAULT_CREDIT_REQUIREMENTS: CreditRequirements = {
   JP: 6,
   JS: 24,
-  Jas: 12,
+  Jas: 14,
   GS: 9,
 };
 
