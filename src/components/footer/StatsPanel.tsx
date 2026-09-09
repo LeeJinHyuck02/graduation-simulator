@@ -72,51 +72,47 @@ export const StatsPanel: React.FC = () => {
               {/* 1. 전공필수 */}
               <div className="flex flex-col items-center justify-center px-1">
                 <span className="text-[11px] font-semibold text-zinc-400 leading-none">전공필수</span>
-                <div className="flex items-baseline justify-center gap-0.5 mt-0.5">
-                  <span className="text-xs sm:text-sm font-bold text-white font-mono leading-tight">
+                <div className="mt-0.5">
+                  <span className="text-xs sm:text-sm font-bold text-white font-mono leading-tight whitespace-nowrap">
                     {stats.credits.JP} / {DEFAULT_CREDIT_REQUIREMENTS.JP}
                   </span>
-                  <span className="text-[10px] text-zinc-500 font-mono">학점</span>
                 </div>
               </div>
 
               {/* 2. 전공선택 */}
               <div className="flex flex-col items-center justify-center px-1">
                 <span className="text-[11px] font-semibold text-zinc-400 leading-none">전공선택</span>
-                <div className="flex items-baseline justify-center gap-0.5 mt-0.5">
-                  <span className="text-xs sm:text-sm font-bold text-white font-mono leading-tight">
+                <div className="mt-0.5">
+                  <span className="text-xs sm:text-sm font-bold text-white font-mono leading-tight whitespace-nowrap">
                     {stats.credits.JS} / {DEFAULT_CREDIT_REQUIREMENTS.JS}
                   </span>
-                  <span className="text-[10px] text-zinc-500 font-mono">학점</span>
                 </div>
               </div>
 
               {/* 3. 자유선택 */}
               <div className="flex flex-col items-center justify-center px-1">
                 <span className="text-[11px] font-semibold text-zinc-400 leading-none">자유선택</span>
-                <div className="flex items-baseline justify-center gap-0.5 mt-0.5">
-                  <span className="text-xs sm:text-sm font-bold text-white font-mono leading-tight">
+                <div className="mt-0.5">
+                  <span className="text-xs sm:text-sm font-bold text-white font-mono leading-tight whitespace-nowrap">
                     {stats.credits.Jas} / {DEFAULT_CREDIT_REQUIREMENTS.Jas}
                   </span>
-                  <span className="text-[10px] text-zinc-500 font-mono">학점</span>
                 </div>
               </div>
 
               {/* 4. 교양선택 */}
               <div className="flex flex-col items-center justify-center px-1">
                 <span className="text-[11px] font-semibold text-zinc-400 leading-none">교양선택</span>
-                <div className="flex items-baseline justify-center gap-0.5 mt-0.5">
-                  <span className="text-xs sm:text-sm font-bold text-white font-mono leading-tight">
+                <div className="mt-0.5">
+                  <span className="text-xs sm:text-sm font-bold text-white font-mono leading-tight whitespace-nowrap">
                     {stats.credits.GS} / {DEFAULT_CREDIT_REQUIREMENTS.GS}
                   </span>
-                  <span className="text-[10px] text-zinc-500 font-mono">학점</span>
                 </div>
               </div>
 
               {/* 5. 영어 / 체육 */}
               <div className="flex flex-col items-center justify-center px-1">
                 <span className="text-[11px] font-semibold text-zinc-400 leading-none">영어 / 체육</span>
-                <div className="flex items-baseline gap-1 mt-0.5 font-mono text-xs sm:text-sm font-bold leading-tight">
+                <div className="flex items-baseline justify-center gap-1 mt-0.5 font-mono text-xs sm:text-sm font-bold leading-tight whitespace-nowrap">
                   <span className="text-orange-400">
                     {stats.counts.Eng} / {DEFAULT_REQUIREMENTS.Eng}
                   </span>
@@ -127,9 +123,9 @@ export const StatsPanel: React.FC = () => {
                 </div>
               </div>
 
-              {/* 6. 총 이수 학점 */}
-              <div className="flex flex-col items-center justify-center px-1">
-                <span className="text-[11px] font-semibold text-zinc-400 leading-none">총 이수 학점</span>
+              {/* 6. 총 학점 */}
+              <div className="flex flex-col items-center justify-center px-1 pr-2 sm:pr-0">
+                <span className="text-[11px] font-semibold text-zinc-400 leading-none">총 학점</span>
                 <span className="text-base sm:text-lg font-black font-mono text-postech leading-tight mt-0.5 drop-shadow-[0_0_8px_rgba(255,51,112,0.3)]">
                   {stats.totalCredits}
                 </span>
