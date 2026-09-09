@@ -112,13 +112,13 @@ export const StatsPanel: React.FC = () => {
               {/* 5. 영어 / 체육 */}
               <div className="flex flex-col items-center justify-center px-1">
                 <span className="text-[11px] font-semibold text-zinc-400 leading-none">영어 / 체육</span>
-                <div className="flex items-baseline justify-center gap-1 mt-0.5 font-mono text-xs sm:text-sm font-bold leading-tight whitespace-nowrap">
+                <div className="flex items-center justify-center mt-0.5 font-mono text-[11px] sm:text-xs font-bold leading-tight whitespace-nowrap tracking-tight">
                   <span className="text-orange-400">
-                    {stats.counts.Eng} / {DEFAULT_REQUIREMENTS.Eng}
+                    {stats.counts.Eng}/{DEFAULT_REQUIREMENTS.Eng}
                   </span>
-                  <span className="text-zinc-600 font-normal">|</span>
+                  <span className="text-zinc-600 mx-1 font-normal text-[10px]">|</span>
                   <span className="text-teal-400">
-                    {stats.counts.PE} / {DEFAULT_REQUIREMENTS.PE}
+                    {stats.counts.PE}/{DEFAULT_REQUIREMENTS.PE}
                   </span>
                 </div>
               </div>
