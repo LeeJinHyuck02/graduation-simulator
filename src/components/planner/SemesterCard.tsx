@@ -40,9 +40,6 @@ export const SemesterCard: React.FC<SemesterCardProps> = ({
           <span className="font-bold text-xs text-zinc-100 whitespace-nowrap">
             {getShortSemesterName(semester.name)}
           </span>
-          <span className="text-[10px] text-zinc-400 font-normal truncate hidden sm:inline">
-            ({semester.name.replace('학년 ', '').replace('학기', '')})
-          </span>
         </div>
         <span className="text-[10px] font-semibold px-1.5 py-0.2 rounded bg-dark-bg text-postech border border-postech/20 flex-shrink-0 font-mono">
           {semesterCredits}학점
