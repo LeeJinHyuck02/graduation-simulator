@@ -62,7 +62,7 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
   scenarios: [],
   currentScenarioId: '',
   showVacations: true,
-  showPreviousSemesters: false,
+  showPreviousSemesters: true,
   currentView: 'planner',
   isLoading: true,
   isSyncing: false,

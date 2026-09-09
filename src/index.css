@@ -12,6 +12,12 @@
   --border-color: #383842;
 }
 
+/* 뷰 전환 시 수직 스크롤바 유무에 따른 좌우 덜컹거림(레이아웃 시프트) 완벽 방지 */
+html {
+  scrollbar-gutter: stable;
+  overflow-y: scroll;
+}
+
 /* Pretendard 폰트 기본 적용 */
 body {
   font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;

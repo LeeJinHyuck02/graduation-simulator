@@ -47,7 +47,7 @@ export const ViewControls: React.FC<ViewControlsProps> = ({ onOpenAddActivity })
       {/* 방학 토글 버튼 */}
       <button
         onClick={toggleVacations}
-        className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-dark-card hover:bg-dark-hover text-zinc-300 border border-dark-border rounded-lg transition-colors"
+        className="flex items-center justify-center gap-1.5 w-[96px] py-1.5 text-xs font-medium bg-dark-card hover:bg-dark-hover text-zinc-300 border border-dark-border rounded-lg transition-colors shrink-0"
         title="방학 학기 표시 여부"
       >
         {showVacations ? <EyeOff size={14} /> : <Eye size={14} />}
@@ -57,7 +57,7 @@ export const ViewControls: React.FC<ViewControlsProps> = ({ onOpenAddActivity })
       {/* 이전 학기 토글 버튼 */}
       <button
         onClick={togglePreviousSemesters}
-        className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-dark-card hover:bg-dark-hover text-zinc-300 border border-dark-border rounded-lg transition-colors"
+        className="flex items-center justify-center gap-1.5 w-[118px] py-1.5 text-xs font-medium bg-dark-card hover:bg-dark-hover text-zinc-300 border border-dark-border rounded-lg transition-colors shrink-0"
         title="이전 학기(3-1 이전) 표시 여부"
       >
         {showPreviousSemesters ? <EyeOff size={14} /> : <Eye size={14} />}
