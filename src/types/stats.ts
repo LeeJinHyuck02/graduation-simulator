@@ -9,6 +9,13 @@ export interface GraduationRequirements {
   PE: number;  // 체육 기준 (예: 1과목)
 }
 
+export interface CreditRequirements {
+  JP: number;  // 전필 기준 (6학점)
+  JS: number;  // 전선 기준 (24학점)
+  Jas: number; // 자선 기준 (12학점)
+  GS: number;  // 교선 기준 (9학점)
+}
+
 export interface GraduationStats {
   counts: Record<CourseType, number>;
   credits: Record<CourseType, number>;

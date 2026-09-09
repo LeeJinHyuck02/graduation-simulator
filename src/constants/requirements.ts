@@ -1,4 +1,4 @@
-import { GraduationRequirements, GraduationStats } from '../types/stats';
+import { GraduationRequirements, CreditRequirements, GraduationStats } from '../types/stats';
 import { Semester } from '../types/semester';
 import { Activity } from '../types/activity';
 import { CourseType } from '../types/course';
@@ -10,6 +10,13 @@ export const DEFAULT_REQUIREMENTS: GraduationRequirements = {
   GS: 3,
   Eng: 4,
   PE: 1,
+};
+
+export const DEFAULT_CREDIT_REQUIREMENTS: CreditRequirements = {
+  JP: 6,
+  JS: 24,
+  Jas: 12,
+  GS: 9,
 };
 
 export function calculateGraduationStats(semesters: Semester[], activities: Activity[]): GraduationStats {

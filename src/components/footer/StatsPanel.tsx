@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { usePlannerStore } from '../../store/usePlannerStore';
-import { DEFAULT_REQUIREMENTS, calculateGraduationStats } from '../../constants/requirements';
+import { DEFAULT_REQUIREMENTS, DEFAULT_CREDIT_REQUIREMENTS, calculateGraduationStats } from '../../constants/requirements';
 import { Award, Briefcase, Microscope, ChevronUp, ChevronDown, BarChart2 } from 'lucide-react';
 
 export const StatsPanel: React.FC = () => {
@@ -22,8 +22,8 @@ export const StatsPanel: React.FC = () => {
 
   return (
     <>
-      {/* 1. 좌측 하단 플로팅 토글 버튼 (항상 노출되어 접기/펼치기 제어) */}
-      <div className="fixed bottom-3 left-4 z-50 pointer-events-auto">
+      {/* 1. 우측 하단 플로팅 토글 버튼 (항상 노출되어 접기/펼치기 제어) */}
+      <div className="fixed bottom-3 sm:bottom-4 right-4 sm:right-6 z-50 pointer-events-auto">
         <button
           onClick={toggleStatsPanel}
           className={`flex items-center gap-2 px-3.5 py-2 rounded-xl border shadow-[0_8px_24px_rgba(0,0,0,0.6)] backdrop-blur-md text-xs font-semibold transition-all group ${
@@ -62,44 +62,44 @@ export const StatsPanel: React.FC = () => {
               {/* 1. 전공필수 */}
               <div className="flex flex-col items-center justify-center px-1">
                 <span className="text-[11px] font-semibold text-zinc-400 leading-none">전공필수</span>
-                <div className="flex items-baseline gap-1 mt-0.5">
+                <div className="flex items-baseline justify-center gap-0.5 mt-0.5">
                   <span className="text-xs sm:text-sm font-bold text-white font-mono leading-tight">
-                    {stats.counts.JP} / {DEFAULT_REQUIREMENTS.JP}
+                    {stats.credits.JP} / {DEFAULT_CREDIT_REQUIREMENTS.JP}
                   </span>
-                  <span className="text-[10px] text-zinc-500 font-mono">({stats.credits.JP}학점)</span>
+                  <span className="text-[10px] text-zinc-500 font-mono">학점</span>
                 </div>
               </div>
 
               {/* 2. 전공선택 */}
               <div className="flex flex-col items-center justify-center px-1">
                 <span className="text-[11px] font-semibold text-zinc-400 leading-none">전공선택</span>
-                <div className="flex items-baseline gap-1 mt-0.5">
+                <div className="flex items-baseline justify-center gap-0.5 mt-0.5">
                   <span className="text-xs sm:text-sm font-bold text-white font-mono leading-tight">
-                    {stats.counts.JS} / {DEFAULT_REQUIREMENTS.JS}
+                    {stats.credits.JS} / {DEFAULT_CREDIT_REQUIREMENTS.JS}
                   </span>
-                  <span className="text-[10px] text-zinc-500 font-mono">({stats.credits.JS}학점)</span>
+                  <span className="text-[10px] text-zinc-500 font-mono">학점</span>
                 </div>
               </div>
 
               {/* 3. 자유선택 */}
               <div className="flex flex-col items-center justify-center px-1">
                 <span className="text-[11px] font-semibold text-zinc-400 leading-none">자유선택</span>
-                <div className="flex items-baseline gap-1 mt-0.5">
+                <div className="flex items-baseline justify-center gap-0.5 mt-0.5">
                   <span className="text-xs sm:text-sm font-bold text-white font-mono leading-tight">
-                    {stats.counts.Jas} / {DEFAULT_REQUIREMENTS.Jas}
+                    {stats.credits.Jas} / {DEFAULT_CREDIT_REQUIREMENTS.Jas}
                   </span>
-                  <span className="text-[10px] text-zinc-500 font-mono">({stats.credits.Jas}학점)</span>
+                  <span className="text-[10px] text-zinc-500 font-mono">학점</span>
                 </div>
               </div>
 
               {/* 4. 교양선택 */}
               <div className="flex flex-col items-center justify-center px-1">
                 <span className="text-[11px] font-semibold text-zinc-400 leading-none">교양선택</span>
-                <div className="flex items-baseline gap-1 mt-0.5">
+                <div className="flex items-baseline justify-center gap-0.5 mt-0.5">
                   <span className="text-xs sm:text-sm font-bold text-white font-mono leading-tight">
-                    {stats.counts.GS} / {DEFAULT_REQUIREMENTS.GS}
+                    {stats.credits.GS} / {DEFAULT_CREDIT_REQUIREMENTS.GS}
                   </span>
-                  <span className="text-[10px] text-zinc-500 font-mono">({stats.credits.GS}학점)</span>
+                  <span className="text-[10px] text-zinc-500 font-mono">학점</span>
                 </div>
               </div>
 
