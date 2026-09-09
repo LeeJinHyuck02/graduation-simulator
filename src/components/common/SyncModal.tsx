@@ -190,37 +190,41 @@ export const SyncModal: React.FC<SyncModalProps> = ({ isOpen, onClose }) => {
             </>
           )}
 
-          {/* 상세 입력 필드 */}
-          <div className="grid grid-cols-2 gap-2">
-            <div>
-              <label className="block text-[11px] font-medium text-zinc-400 mb-1">API Key</label>
-              <input
-                type="password"
-                value={apiKey}
-                onChange={(e) => setApiKey(e.target.value)}
-                placeholder="AIzaSy..."
-                className="w-full px-2.5 py-1.5 text-xs bg-dark-bg border border-dark-border rounded-lg text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-amber-500"
-              />
-            </div>
-            <div>
-              <label className="block text-[11px] font-medium text-zinc-400 mb-1">Project ID</label>
-              <input
-                type="text"
-                value={projectId}
-                onChange={(e) => setProjectId(e.target.value)}
-                placeholder="postech-sim-xxxx"
-                className="w-full px-2.5 py-1.5 text-xs bg-dark-bg border border-dark-border rounded-lg text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-amber-500"
-              />
-            </div>
-          </div>
+          {!isConfiguredViaEnv() && (
+            <>
+              {/* 상세 입력 필드 */}
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="block text-[11px] font-medium text-zinc-400 mb-1">API Key</label>
+                  <input
+                    type="password"
+                    value={apiKey}
+                    onChange={(e) => setApiKey(e.target.value)}
+                    placeholder="AIzaSy..."
+                    className="w-full px-2.5 py-1.5 text-xs bg-dark-bg border border-dark-border rounded-lg text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-amber-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[11px] font-medium text-zinc-400 mb-1">Project ID</label>
+                  <input
+                    type="text"
+                    value={projectId}
+                    onChange={(e) => setProjectId(e.target.value)}
+                    placeholder="postech-sim-xxxx"
+                    className="w-full px-2.5 py-1.5 text-xs bg-dark-bg border border-dark-border rounded-lg text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-amber-500"
+                  />
+                </div>
+              </div>
+            </>
+          )}
 
           {/* 동기화 방/식별코드 */}
           <div className="space-y-1">
             <div className="flex items-center justify-between">
               <label className="block text-[11px] font-medium text-zinc-300">
-                기기 동기화 코드 (Sync Room ID)
+                기기 동기화 식별코드 (Sync Room ID)
               </label>
-              <span className="text-[10px] text-zinc-500">PC와 아이패드에 동일한 코드 입력</span>
+              <span className="text-[10px] text-zinc-500">PC와 아이패드에 동일한 코드 지정</span>
             </div>
             <div className="flex items-center gap-1.5">
               <KeyRound size={14} className="text-zinc-500" />
@@ -252,9 +256,9 @@ export const SyncModal: React.FC<SyncModalProps> = ({ isOpen, onClose }) => {
               className="flex-1 flex items-center justify-center gap-1.5 py-2 px-4 bg-amber-500 hover:bg-amber-600 text-black text-xs font-bold rounded-lg transition-colors disabled:opacity-50"
             >
               <RefreshCw size={14} className={isSyncingNow ? 'animate-spin' : ''} />
-              <span>동기화 저장 및 연결</span>
+              <span>{isConfiguredViaEnv() ? '현재 데이터 클라우드로 즉시 업로드' : '동기화 저장 및 연결'}</span>
             </button>
-            {isConfigured && (
+            {isConfigured && !isConfiguredViaEnv() && (
               <button
                 onClick={handleDisconnect}
                 title="클라우드 연동 해제"

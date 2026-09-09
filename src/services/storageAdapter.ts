@@ -28,6 +28,28 @@ export const storageAdapter = {
             }
             return data.scenarios as Scenario[];
           }
+        } else {
+          // Firestore 문서가 아직 비어있는 경우: 기존 기본 시나리오(분배, 기본, 빠른 졸업, 드랍)를 자동 최초 주입
+          console.log('🌱 Firestore에 문서가 없어 초기 시나리오 데이터를 자동 주입(Seed)합니다.');
+          const rawLocal = localStorage.getItem(LOCAL_STORAGE_KEY);
+          let initialData = DEFAULT_SCENARIOS;
+          if (rawLocal) {
+            try {
+              const parsed = JSON.parse(rawLocal);
+              if (Array.isArray(parsed) && parsed.length > 0) initialData = parsed;
+            } catch {
+              // fallback
+            }
+          }
+          const now = Date.now();
+          await setDoc(docRef, {
+            scenarios: initialData,
+            updatedAt: now,
+            clientInfo: 'initial_seed',
+          });
+          localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(initialData));
+          localStorage.setItem(LAST_SAVED_TIME_KEY, String(now));
+          return initialData;
         }
       } catch (e) {
         console.warn('Firebase 로드 실패, 로컬 데이터를 사용합니다:', e);
