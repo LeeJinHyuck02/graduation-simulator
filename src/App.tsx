@@ -61,7 +61,7 @@ export function App() {
     <div className={`min-h-screen bg-dark-bg flex flex-col transition-all duration-300 ${showStatsPanel ? 'pb-32 sm:pb-28' : 'pb-16'}`}>
       {/* 상단 앱 헤더 (단일 행으로 시나리오 탭과 컨트롤 버튼 통합 배치) */}
       <header className="sticky top-0 z-30 bg-dark-bg/95 backdrop-blur-md border-b border-dark-border px-4 py-2">
-        <div className="max-w-5xl mx-auto flex items-center justify-between gap-3 overflow-x-auto scrollbar-none">
+        <div className="max-w-5xl mx-auto flex items-center justify-between gap-3">
           {/* 좌측: 시나리오 탭 목록 */}
           <div className="flex-shrink-0">
             <ScenarioTabs />
