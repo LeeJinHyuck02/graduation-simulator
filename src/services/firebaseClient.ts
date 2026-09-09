@@ -30,21 +30,12 @@ export function saveStoredSyncRoomId(roomId: string): void {
   }
 }
 
-export function getStoredFirebaseConfig(): FirebaseConfig | null {
-  // 1. LocalStorage 우선
-  const saved = localStorage.getItem(STORAGE_KEYS.FIREBASE_CONFIG);
-  if (saved) {
-    try {
-      const parsed = JSON.parse(saved);
-      if (parsed.apiKey && parsed.projectId) {
-        return parsed as FirebaseConfig;
-      }
-    } catch {
-      // parse error, fallback to env
-    }
-  }
+export function isConfiguredViaEnv(): boolean {
+  return Boolean(import.meta.env.VITE_FIREBASE_API_KEY && import.meta.env.VITE_FIREBASE_PROJECT_ID);
+}
 
-  // 2. 환경변수 (VITE_FIREBASE_*)
+export function getStoredFirebaseConfig(): FirebaseConfig | null {
+  // 1. 환경변수 (VITE_FIREBASE_*) 최우선 (GitHub Secrets 또는 .env.local)
   const envApiKey = import.meta.env.VITE_FIREBASE_API_KEY;
   const envProjectId = import.meta.env.VITE_FIREBASE_PROJECT_ID;
   if (envApiKey && envProjectId) {
@@ -56,6 +47,19 @@ export function getStoredFirebaseConfig(): FirebaseConfig | null {
       messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '',
       appId: import.meta.env.VITE_FIREBASE_APP_ID || '',
     };
+  }
+
+  // 2. 브라우저 LocalStorage 수동 입력값
+  const saved = localStorage.getItem(STORAGE_KEYS.FIREBASE_CONFIG);
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+      if (parsed.apiKey && parsed.projectId) {
+        return parsed as FirebaseConfig;
+      }
+    } catch {
+      // parse error, fallback
+    }
   }
 
   return null;

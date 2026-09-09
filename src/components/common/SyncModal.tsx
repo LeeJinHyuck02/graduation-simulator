@@ -6,6 +6,7 @@ import {
   getStoredSyncRoomId,
   saveStoredSyncRoomId,
   parseFirebaseSnippet,
+  isConfiguredViaEnv,
   FirebaseConfig,
 } from '../../services/firebaseClient';
 import { storageAdapter } from '../../services/storageAdapter';
@@ -161,19 +162,33 @@ export const SyncModal: React.FC<SyncModalProps> = ({ isOpen, onClose }) => {
             어느 한쪽에서 과목을 옮기는 즉시 다른 쪽 기기에도 <strong>실시간 반영</strong>됩니다.
           </p>
 
-          {/* 간편 붙여넣기 박스 */}
-          <div className="space-y-1.5">
-            <label className="block text-xs font-medium text-zinc-300">
-              Firebase 콘솔 코드 붙여넣기 (권장: 자동 파싱)
-            </label>
-            <textarea
-              rows={2}
-              value={rawSnippet}
-              onChange={(e) => handleSnippetChange(e.target.value)}
-              placeholder="const firebaseConfig = { apiKey: '...', projectId: '...' }; 붙여넣기"
-              className="w-full px-3 py-2 text-xs bg-dark-bg border border-dark-border rounded-lg text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-amber-500 font-mono"
-            />
-          </div>
+          {isConfiguredViaEnv() ? (
+            <div className="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-lg space-y-1">
+              <div className="flex items-center gap-1.5 text-emerald-400 font-semibold text-xs">
+                <CheckCircle2 size={16} />
+                <span>환경변수로 자동 연동됨 (GitHub Secrets / .env)</span>
+              </div>
+              <p className="text-[11px] text-zinc-300 leading-relaxed">
+                이 웹사이트는 환경변수로 Firebase와 영구 연결되어 있습니다. 별도로 코드를 복사/붙여넣기할 필요 없이, PC와 아이패드에서 사이트를 열기만 하면 즉시 실시간 동기화됩니다.
+              </p>
+            </div>
+          ) : (
+            <>
+              {/* 간편 붙여넣기 박스 */}
+              <div className="space-y-1.5">
+                <label className="block text-xs font-medium text-zinc-300">
+                  Firebase 콘솔 코드 붙여넣기 (권장: 자동 파싱)
+                </label>
+                <textarea
+                  rows={2}
+                  value={rawSnippet}
+                  onChange={(e) => handleSnippetChange(e.target.value)}
+                  placeholder="const firebaseConfig = { apiKey: '...', projectId: '...' }; 붙여넣기"
+                  className="w-full px-3 py-2 text-xs bg-dark-bg border border-dark-border rounded-lg text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-amber-500 font-mono"
+                />
+              </div>
+            </>
+          )}
 
           {/* 상세 입력 필드 */}
           <div className="grid grid-cols-2 gap-2">
