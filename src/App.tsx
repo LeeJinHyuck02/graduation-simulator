@@ -12,7 +12,7 @@ import { Activity } from './types/activity';
 import { GraduationCap } from 'lucide-react';
 
 export function App() {
-  const { init, isLoading, currentView } = usePlannerStore();
+  const { init, isLoading, currentView, showStatsPanel } = usePlannerStore();
 
   // 과목 모달 상태
   const [isCourseModalOpen, setIsCourseModalOpen] = useState(false);
@@ -59,7 +59,7 @@ export function App() {
   }
 
   return (
-    <div className="min-h-screen bg-dark-bg flex flex-col pb-44">
+    <div className={`min-h-screen bg-dark-bg flex flex-col transition-all duration-300 ${showStatsPanel ? 'pb-32 sm:pb-28' : 'pb-16'}`}>
       {/* 상단 앱 헤더 */}
       <header className="sticky top-0 z-30 bg-dark-bg/95 backdrop-blur-md border-b border-dark-border px-4 py-2.5">
         <div className="max-w-5xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">

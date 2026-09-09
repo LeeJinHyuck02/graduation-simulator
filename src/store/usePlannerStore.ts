@@ -11,6 +11,7 @@ interface PlannerState {
   showVacations: boolean;
   showPreviousSemesters: boolean;
   currentView: 'planner' | 'activities';
+  showStatsPanel: boolean;
   isLoading: boolean;
   isSyncing: boolean;
 
@@ -19,6 +20,7 @@ interface PlannerState {
   setCurrentScenarioId: (id: string) => void;
   toggleVacations: () => void;
   togglePreviousSemesters: () => void;
+  toggleStatsPanel: () => void;
   setCurrentView: (view: 'planner' | 'activities') => void;
 
   // Course Actions
@@ -64,6 +66,7 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
   showVacations: true,
   showPreviousSemesters: true,
   currentView: 'planner',
+  showStatsPanel: false,
   isLoading: true,
   isSyncing: false,
 
@@ -105,6 +108,7 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
   setCurrentScenarioId: (id) => set({ currentScenarioId: id }),
   toggleVacations: () => set((state) => ({ showVacations: !state.showVacations })),
   togglePreviousSemesters: () => set((state) => ({ showPreviousSemesters: !state.showPreviousSemesters })),
+  toggleStatsPanel: () => set((state) => ({ showStatsPanel: !state.showStatsPanel })),
   setCurrentView: (view) => set({ currentView: view }),
 
   // 1. 과목 이동 (학기간 또는 동일 학기 내)
