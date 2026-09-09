@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { usePlannerStore } from '../../store/usePlannerStore';
 import { Activity, ACTIVITY_TYPE_OPTIONS } from '../../types/activity';
 import { getShortSemesterName } from '../../types/semester';
@@ -38,6 +38,24 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
   visibleSemesters.forEach((sem, colIdx) => {
     originalIndexMap.set(sem.originalIndex, colIdx);
   });
+
+  // 비교과 활동 정렬: 1순위 인턴 -> 연구 -> 자격증, 2순위 시작 학기(빠른 순), 3순위 종료 학기, 4순위 이름
+  const TYPE_PRIORITY: Record<string, number> = {
+    Intern: 1,
+    Research: 2,
+    Cert: 3,
+  };
+
+  const sortedActivities = useMemo(() => {
+    return [...currentScenario.activities].sort((a, b) => {
+      const pA = TYPE_PRIORITY[a.type] ?? 99;
+      const pB = TYPE_PRIORITY[b.type] ?? 99;
+      if (pA !== pB) return pA - pB;
+      if (a.startSem !== b.startSem) return a.startSem - b.startSem;
+      if (a.endSem !== b.endSem) return a.endSem - b.endSem;
+      return a.name.localeCompare(b.name);
+    });
+  }, [currentScenario.activities]);
 
   return (
     <div className="w-full bg-dark-card border border-dark-border rounded-xl p-4 shadow-md space-y-4 overflow-x-auto">
@@ -79,7 +97,7 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
 
         {/* 활동 항목 목록 */}
         <div className="divide-y divide-dark-border/60">
-          {currentScenario.activities.map((act) => {
+          {sortedActivities.map((act) => {
             const startCol = originalIndexMap.get(act.startSem);
             const endCol = originalIndexMap.get(act.endSem);
 
@@ -123,7 +141,7 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
             );
           })}
 
-          {currentScenario.activities.length === 0 && (
+          {sortedActivities.length === 0 && (
             <div className="p-8 text-center text-xs text-zinc-500">
               등록된 비교과 활동이 없습니다. '+ 활동 추가' 버튼으로 자격증이나 인턴십을 등록해 보세요.
             </div>

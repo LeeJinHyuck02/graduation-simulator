@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { usePlannerStore } from '../../store/usePlannerStore';
 import { DEFAULT_REQUIREMENTS, DEFAULT_CREDIT_REQUIREMENTS, calculateGraduationStats } from '../../constants/requirements';
-import { Award, Briefcase, Microscope, ChevronUp, ChevronDown, BarChart2 } from 'lucide-react';
+import { Award, Briefcase, Microscope, ChevronUp, BarChart2, X } from 'lucide-react';
 
 export const StatsPanel: React.FC = () => {
   const { scenarios, currentScenarioId, showStatsPanel, toggleStatsPanel } = usePlannerStore();
@@ -22,43 +22,51 @@ export const StatsPanel: React.FC = () => {
 
   return (
     <>
-      {/* 1. 플로팅 토글 버튼 (메인 카드 열 max-w-5xl 우측 끝에 정확히 정렬) */}
-      <div className="fixed bottom-3 sm:bottom-4 left-0 right-0 z-50 pointer-events-none px-3">
+      {/* 1. 플로팅 토글 버튼 (대시보드가 닫혀있을 때만 노출, 열리면 사라짐) */}
+      <div
+        className={`fixed bottom-3 sm:bottom-4 left-0 right-0 z-50 pointer-events-none px-3 transition-all duration-200 transform ${
+          showStatsPanel
+            ? 'opacity-0 translate-y-3 pointer-events-none invisible scale-95'
+            : 'opacity-100 translate-y-0 pointer-events-auto visible scale-100'
+        }`}
+      >
         <div className="w-full max-w-5xl mx-auto flex justify-end">
           <button
             onClick={toggleStatsPanel}
-            className={`pointer-events-auto flex items-center gap-2 px-3.5 py-2 rounded-xl border shadow-[0_8px_24px_rgba(0,0,0,0.6)] backdrop-blur-md text-xs font-semibold transition-all group ${
-              showStatsPanel
-                ? 'bg-zinc-800 text-white border-zinc-600 shadow-postech/10'
-                : 'bg-zinc-900/95 hover:bg-zinc-800 text-zinc-200 border-zinc-700/90 hover:border-postech'
-            }`}
-            title={showStatsPanel ? '이수 현황 대시보드 접기' : '이수 현황 대시보드 펼치기'}
+            className="pointer-events-auto flex items-center gap-2 px-3.5 py-2 rounded-xl border shadow-[0_8px_24px_rgba(0,0,0,0.6)] backdrop-blur-md text-xs font-semibold bg-zinc-900/95 hover:bg-zinc-800 text-zinc-200 border-zinc-700/90 hover:border-postech transition-all group"
+            title="이수 현황 대시보드 펼치기"
           >
             <BarChart2 size={15} className="text-postech group-hover:scale-110 transition-transform" />
             <span>이수 현황</span>
             <span className="px-1.5 py-0.5 text-[10px] font-mono font-bold bg-zinc-800/90 border border-zinc-700 rounded text-postech">
               {stats.totalCredits}학점
             </span>
-            {showStatsPanel ? (
-              <ChevronDown size={14} className="text-zinc-400 group-hover:text-white transition-colors" />
-            ) : (
-              <ChevronUp size={14} className="text-zinc-400 group-hover:text-white transition-colors" />
-            )}
+            <ChevronUp size={14} className="text-zinc-400 group-hover:text-white transition-colors" />
           </button>
         </div>
       </div>
 
       {/* 2. 하단 슬림 대시보드 패널 (토글에 따라 부드럽게 슬라이드 업/다운) */}
       <footer
-        className={`fixed bottom-14 left-0 right-0 z-40 pointer-events-none px-3 flex justify-center transition-all duration-300 transform ${
+        className={`fixed bottom-3 sm:bottom-4 left-0 right-0 z-40 pointer-events-none px-3 flex justify-center transition-all duration-300 transform ${
           showStatsPanel
             ? 'translate-y-0 opacity-100'
-            : 'translate-y-12 opacity-0 pointer-events-none'
+            : 'translate-y-8 opacity-0 pointer-events-none'
         }`}
       >
         <div className="w-full max-w-5xl pointer-events-auto relative">
           {/* 오리지널 대시보드 통계 패널 박스 (투명 배경 플로팅 아일랜드 스타일) */}
-          <div className="rounded-xl border border-zinc-700/70 bg-gradient-to-b from-zinc-800/95 to-zinc-900/95 shadow-[0_12px_32px_rgba(0,0,0,0.7)] backdrop-blur-xl px-3.5 py-1.5 space-y-1">
+          <div className="relative rounded-xl border border-zinc-700/70 bg-gradient-to-b from-zinc-800/95 to-zinc-900/95 shadow-[0_12px_32px_rgba(0,0,0,0.7)] backdrop-blur-xl px-3.5 py-1.5 space-y-1">
+            {/* 우측 상단 닫기 (X) 버튼 */}
+            <button
+              onClick={toggleStatsPanel}
+              className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 p-1 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-700/70 transition-colors z-20"
+              title="이수 현황 대시보드 닫기"
+              aria-label="닫기"
+            >
+              <X size={15} />
+            </button>
+
             {/* 1단: 교과목 이수 현황 (6컬럼 균등 분할) */}
             <div className="grid grid-cols-6 w-full text-center divide-x divide-zinc-700/70 items-center">
               {/* 1. 전공필수 */}
