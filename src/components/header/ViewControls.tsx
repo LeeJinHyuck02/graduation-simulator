@@ -1,13 +1,12 @@
 import React from 'react';
 import { usePlannerStore } from '../../store/usePlannerStore';
-import { Cloud, Eye, EyeOff, Plus, LayoutGrid, CalendarRange } from 'lucide-react';
+import { Eye, EyeOff, Plus, LayoutGrid, CalendarRange } from 'lucide-react';
 
 interface ViewControlsProps {
-  onOpenSync: () => void;
   onOpenAddActivity: () => void;
 }
 
-export const ViewControls: React.FC<ViewControlsProps> = ({ onOpenSync, onOpenAddActivity }) => {
+export const ViewControls: React.FC<ViewControlsProps> = ({ onOpenAddActivity }) => {
   const {
     showVacations,
     toggleVacations,
@@ -72,16 +71,6 @@ export const ViewControls: React.FC<ViewControlsProps> = ({ onOpenSync, onOpenAd
       >
         <Plus size={14} />
         <span>새 활동</span>
-      </button>
-
-      {/* 기기 간 동기화 모달 열기 버튼 */}
-      <button
-        onClick={onOpenSync}
-        className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-dark-card hover:bg-dark-hover text-zinc-300 border border-dark-border rounded-lg transition-colors"
-        title="기기 간 실시간 동기화 및 백업"
-      >
-        <Cloud size={14} className="text-postech" />
-        <span className="hidden sm:inline">기기 동기화</span>
       </button>
     </div>
   );

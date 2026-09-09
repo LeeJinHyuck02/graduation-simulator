@@ -6,7 +6,6 @@ import { SemesterGrid } from './components/planner/SemesterGrid';
 import { ActivityTimeline } from './components/activities/ActivityTimeline';
 import { CourseModal } from './components/planner/CourseModal';
 import { ActivityModal } from './components/activities/ActivityModal';
-import { SyncModal } from './components/common/SyncModal';
 import { StatsPanel } from './components/footer/StatsPanel';
 import { Course } from './types/course';
 import { Activity } from './types/activity';
@@ -14,9 +13,6 @@ import { GraduationCap } from 'lucide-react';
 
 export function App() {
   const { init, isLoading, currentView } = usePlannerStore();
-
-  // 모달 상태
-  const [isSyncOpen, setIsSyncOpen] = useState(false);
 
   // 과목 모달 상태
   const [isCourseModalOpen, setIsCourseModalOpen] = useState(false);
@@ -83,10 +79,7 @@ export function App() {
           </div>
 
           {/* 뷰 및 필터 컨트롤 */}
-          <ViewControls
-            onOpenSync={() => setIsSyncOpen(true)}
-            onOpenAddActivity={handleAddActivity}
-          />
+          <ViewControls onOpenAddActivity={handleAddActivity} />
         </div>
 
         {/* 시나리오 탭 목록 */}
@@ -125,11 +118,6 @@ export function App() {
         isOpen={isActivityModalOpen}
         onClose={() => setIsActivityModalOpen(false)}
         initialActivity={selectedActivity}
-      />
-
-      <SyncModal
-        isOpen={isSyncOpen}
-        onClose={() => setIsSyncOpen(false)}
       />
     </div>
   );
