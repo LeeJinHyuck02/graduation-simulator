@@ -4,6 +4,10 @@ import { Course } from '../types/course';
 import { Activity } from '../types/activity';
 import { storageAdapter } from '../services/storageAdapter';
 import { DEFAULT_SCENARIOS } from '../constants/defaultData';
+import { useAuthStore } from './useAuthStore';
+
+// 잠금 상태(보기 전용)에서는 모든 데이터 변경 액션을 차단
+const canEdit = () => useAuthStore.getState().isAuthenticated;
 
 interface PlannerState {
   scenarios: Scenario[];
@@ -113,6 +117,7 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
 
   // 1. 과목 이동 (학기간 또는 동일 학기 내)
   moveCourse: (sourceSemId, targetSemId, courseId, targetIndex) => {
+    if (!canEdit()) return;
     const { scenarios, currentScenarioId } = get();
     const scenario = scenarios.find((s) => s.id === currentScenarioId);
     if (!scenario) return;
@@ -147,6 +152,7 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
 
   // 동일 학기 내 순서 정렬
   reorderCoursesInSemester: (semId, activeId, overId) => {
+    if (!canEdit()) return;
     if (activeId === overId) return;
     const { scenarios, currentScenarioId } = get();
     const scenario = scenarios.find((s) => s.id === currentScenarioId);
@@ -175,6 +181,7 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
 
   // 2. 과목 추가
   addCourse: (semId, courseData) => {
+    if (!canEdit()) return;
     const { scenarios, currentScenarioId } = get();
     const newCourse: Course = {
       ...courseData,
@@ -199,6 +206,7 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
 
   // 3. 과목 수정
   updateCourse: (courseId, updated) => {
+    if (!canEdit()) return;
     const { scenarios, currentScenarioId } = get();
     const updatedScenarios = scenarios.map((s) => {
       if (s.id !== currentScenarioId) return s;
@@ -217,6 +225,7 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
 
   // 4. 과목 삭제
   deleteCourse: (courseId) => {
+    if (!canEdit()) return;
     const { scenarios, currentScenarioId } = get();
     const updatedScenarios = scenarios.map((s) => {
       if (s.id !== currentScenarioId) return s;
@@ -235,6 +244,7 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
 
   // 5. 활동 추가
   addActivity: (activityData) => {
+    if (!canEdit()) return;
     const { scenarios, currentScenarioId } = get();
     const newActivity: Activity = {
       ...activityData,
@@ -255,6 +265,7 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
 
   // 6. 활동 수정
   updateActivity: (activityId, updated) => {
+    if (!canEdit()) return;
     const { scenarios, currentScenarioId } = get();
     const updatedScenarios = scenarios.map((s) => {
       if (s.id !== currentScenarioId) return s;
@@ -270,6 +281,7 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
 
   // 7. 활동 삭제
   deleteActivity: (activityId) => {
+    if (!canEdit()) return;
     const { scenarios, currentScenarioId } = get();
     const updatedScenarios = scenarios.map((s) => {
       if (s.id !== currentScenarioId) return s;
@@ -285,6 +297,7 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
 
   // 8. 새 시나리오 생성
   addScenario: (name) => {
+    if (!canEdit()) return;
     const { scenarios } = get();
     const baseScenario = scenarios[0] || DEFAULT_SCENARIOS[0];
     const newId = `scenario-${Date.now()}`;
@@ -307,6 +320,7 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
 
   // 9. 시나리오 데이터 가져오기
   importScenarios: (imported) => {
+    if (!canEdit()) return;
     if (!Array.isArray(imported) || imported.length === 0) return;
     set({ scenarios: imported, currentScenarioId: imported[0].id });
     storageAdapter.saveScenarios(imported);
@@ -314,6 +328,7 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
 
   // 10. 초기화
   resetToDefault: () => {
+    if (!canEdit()) return;
     set({ scenarios: DEFAULT_SCENARIOS, currentScenarioId: DEFAULT_SCENARIOS[0].id });
     storageAdapter.saveScenarios(DEFAULT_SCENARIOS);
   },

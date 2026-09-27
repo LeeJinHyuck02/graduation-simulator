@@ -1,6 +1,7 @@
 import React from 'react';
 import { usePlannerStore } from '../../store/usePlannerStore';
 import { Eye, EyeOff, LayoutGrid, CalendarRange } from 'lucide-react';
+import { LockButton } from './LockButton';
 
 export const ViewControls: React.FC = () => {
   const {
@@ -69,6 +70,9 @@ export const ViewControls: React.FC = () => {
         {showPreviousSemesters ? <Eye size={14} className="text-zinc-300" /> : <EyeOff size={14} className="text-zinc-500" />}
         <span>이전 학기</span>
       </button>
+
+      {/* 잠금 / 편집 토글 버튼 */}
+      <LockButton />
     </div>
   );
 };

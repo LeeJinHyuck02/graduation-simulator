@@ -4,6 +4,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { Course } from '../../types/course';
 import { CourseBadge } from '../common/Badge';
 import { GripVertical } from 'lucide-react';
+import { useAuthStore } from '../../store/useAuthStore';
 
 interface CourseCardProps {
   course: Course;
@@ -12,6 +13,7 @@ interface CourseCardProps {
 }
 
 export const CourseCard: React.FC<CourseCardProps> = ({ course, semId, onEdit }) => {
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const {
     attributes,
     listeners,
@@ -21,6 +23,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course, semId, onEdit })
     isDragging,
   } = useSortable({
     id: course.id,
+    disabled: !isAuthenticated,
     data: {
       type: 'Course',
       course,
@@ -44,7 +47,8 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course, semId, onEdit })
         isDragging ? 'ring-2 ring-postech ring-offset-1 ring-offset-dark-bg z-30' : ''
       }`}
     >
-      {/* 드래그 핸들 */}
+      {/* 드래그 핸들 (편집 모드에서만) */}
+      {isAuthenticated && (
       <div
         {...attributes}
         {...listeners}
@@ -53,6 +57,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course, semId, onEdit })
       >
         <GripVertical size={12} />
       </div>
+      )}
 
       {/* 이수 구분 뱃지 */}
       <CourseBadge type={course.type} />
@@ -60,8 +65,8 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course, semId, onEdit })
       {/* 과목명 (클릭 시 수정) */}
       <div
         onClick={() => onEdit(course)}
-        className="flex-1 min-w-0 cursor-pointer"
-        title={hasName ? course.name : '과목명 미정 (클릭하여 수정)'}
+        className={`flex-1 min-w-0 ${isAuthenticated ? 'cursor-pointer' : ''}`}
+        title={hasName ? course.name : isAuthenticated ? '과목명 미정 (클릭하여 수정)' : '과목명 미정'}
       >
         <span
           className={`text-[11px] font-medium truncate block leading-tight ${
@@ -75,7 +80,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course, semId, onEdit })
       {/* 학점 */}
       <span
         onClick={() => onEdit(course)}
-        className="text-[10px] font-mono font-medium text-zinc-400 bg-dark-bg/70 px-1 py-0.5 rounded cursor-pointer flex-shrink-0"
+        className={`text-[10px] font-mono font-medium text-zinc-400 bg-dark-bg/70 px-1 py-0.5 rounded flex-shrink-0 ${isAuthenticated ? 'cursor-pointer' : ''}`}
       >
         {course.credit}학점
       </span>

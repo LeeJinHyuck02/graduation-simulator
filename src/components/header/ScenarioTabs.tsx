@@ -2,9 +2,11 @@ import React, { useState, useRef, useEffect } from 'react';
 import { usePlannerStore } from '../../store/usePlannerStore';
 import { Plus, ChevronDown, Check } from 'lucide-react';
 import { Modal } from '../common/Modal';
+import { useAuthStore } from '../../store/useAuthStore';
 
 export const ScenarioTabs: React.FC = () => {
   const { scenarios, currentScenarioId, setCurrentScenarioId, addScenario } = usePlannerStore();
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const [isOpen, setIsOpen] = useState(false);
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [newScenarioName, setNewScenarioName] = useState('');
@@ -86,7 +88,8 @@ export const ScenarioTabs: React.FC = () => {
               })}
             </div>
 
-            {/* 토글 최하단: 시나리오 추가 버튼 */}
+            {/* 토글 최하단: 시나리오 추가 버튼 (편집 모드에서만) */}
+            {isAuthenticated && (
             <div className="pt-1 mt-1 border-t border-zinc-800 px-1">
               <button
                 onClick={() => {
@@ -99,11 +102,12 @@ export const ScenarioTabs: React.FC = () => {
                 <span>시나리오 추가</span>
               </button>
             </div>
+            )}
           </div>
         )}
       </div>
 
-      <Modal isOpen={isAddOpen} onClose={() => setIsAddOpen(false)} title="새 시나리오 추가">
+      <Modal isOpen={isAddOpen && isAuthenticated} onClose={() => setIsAddOpen(false)} title="새 시나리오 추가">
         <form onSubmit={handleCreate} className="space-y-4">
           <div>
             <label className="block text-xs font-medium text-zinc-300 mb-1">시나리오 명칭</label>

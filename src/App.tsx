@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { usePlannerStore } from './store/usePlannerStore';
+import { useAuthStore } from './store/useAuthStore';
 import { ScenarioTabs } from './components/header/ScenarioTabs';
 import { ViewControls } from './components/header/ViewControls';
 import { SemesterGrid } from './components/planner/SemesterGrid';
@@ -12,6 +13,7 @@ import { Activity } from './types/activity';
 
 export function App() {
   const { init, isLoading, currentView, showStatsPanel } = usePlannerStore();
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
 
   // 과목 모달 상태
   const [isCourseModalOpen, setIsCourseModalOpen] = useState(false);
@@ -26,24 +28,36 @@ export function App() {
     init();
   }, [init]);
 
+  // 잠금 시 열려 있던 편집 모달 닫기
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setIsCourseModalOpen(false);
+      setIsActivityModalOpen(false);
+    }
+  }, [isAuthenticated]);
+
   const handleAddCourse = (semId: string | number) => {
+    if (!isAuthenticated) return;
     setSelectedSemId(semId);
     setSelectedCourse(null);
     setIsCourseModalOpen(true);
   };
 
   const handleEditCourse = (course: Course) => {
+    if (!isAuthenticated) return;
     setSelectedSemId(null);
     setSelectedCourse(course);
     setIsCourseModalOpen(true);
   };
 
   const handleAddActivity = () => {
+    if (!isAuthenticated) return;
     setSelectedActivity(null);
     setIsActivityModalOpen(true);
   };
 
   const handleEditActivity = (activity: Activity) => {
+    if (!isAuthenticated) return;
     setSelectedActivity(activity);
     setIsActivityModalOpen(true);
   };

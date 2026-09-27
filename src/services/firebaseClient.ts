@@ -1,5 +1,6 @@
 import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
 import { getFirestore, Firestore } from 'firebase/firestore';
+import { getAuth, Auth } from 'firebase/auth';
 
 export interface FirebaseConfig {
   apiKey: string;
@@ -122,6 +123,22 @@ export function parseFirebaseSnippet(input: string): FirebaseConfig | null {
   }
 
   return null;
+}
+
+function getFirebaseApp(): FirebaseApp | null {
+  const config = getStoredFirebaseConfig();
+  if (!config) return null;
+  return getApps().length > 0 ? getApp() : initializeApp(config);
+}
+
+export function getFirebaseAuth(): Auth | null {
+  try {
+    const app = getFirebaseApp();
+    return app ? getAuth(app) : null;
+  } catch (err) {
+    console.error('Firebase Auth 초기화 실패:', err);
+    return null;
+  }
 }
 
 export function getFirebaseDb(): Firestore | null {

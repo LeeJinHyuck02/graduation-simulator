@@ -5,6 +5,7 @@ import { Semester, getShortSemesterName } from '../../types/semester';
 import { Course } from '../../types/course';
 import { CourseCard } from './CourseCard';
 import { Plus } from 'lucide-react';
+import { useAuthStore } from '../../store/useAuthStore';
 
 interface SemesterCardProps {
   semester: Semester;
@@ -17,8 +18,10 @@ export const SemesterCard: React.FC<SemesterCardProps> = ({
   onEditCourse,
   onAddCourse,
 }) => {
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const { setNodeRef, isOver } = useDroppable({
     id: `droppable-sem-${semester.id}`,
+    disabled: !isAuthenticated,
     data: {
       type: 'Semester',
       semester,
@@ -64,12 +67,13 @@ export const SemesterCard: React.FC<SemesterCardProps> = ({
 
         {semester.courses.length === 0 && (
           <div className="flex items-center justify-center h-20 border border-dashed border-dark-border/50 rounded text-zinc-500 text-[11px]">
-            과목 드롭
+            {isAuthenticated ? '과목 드롭' : '과목 없음'}
           </div>
         )}
       </div>
 
-      {/* 과목 추가 버튼 */}
+      {/* 과목 추가 버튼 (편집 모드에서만) */}
+      {isAuthenticated && (
       <div className="p-1 border-t border-dark-border/50 bg-dark-card/90">
         <button
           onClick={() => onAddCourse(semester.id)}
@@ -79,6 +83,7 @@ export const SemesterCard: React.FC<SemesterCardProps> = ({
           <span>과목 추가</span>
         </button>
       </div>
+      )}
     </div>
   );
 };

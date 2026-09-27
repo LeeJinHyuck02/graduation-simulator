@@ -4,6 +4,7 @@ import { Activity, ACTIVITY_TYPE_OPTIONS } from '../../types/activity';
 import { getShortSemesterName } from '../../types/semester';
 import { ActivityBadge } from '../common/Badge';
 import { Plus } from 'lucide-react';
+import { useAuthStore } from '../../store/useAuthStore';
 
 interface ActivityTimelineProps {
   onEditActivity: (activity: Activity) => void;
@@ -15,6 +16,7 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
   onAddActivity,
 }) => {
   const { scenarios, currentScenarioId, showVacations, showPreviousSemesters } = usePlannerStore();
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const currentScenario = scenarios.find((s) => s.id === currentScenarioId);
 
   if (!currentScenario) return null;
@@ -66,6 +68,7 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
             자격증 취득, 인턴십 참여, 연구 활동(UGRP 등) 기간을 학기별로 관리합니다.
           </p>
         </div>
+        {isAuthenticated && (
         <button
           onClick={onAddActivity}
           className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-postech hover:bg-postech-hover text-white rounded-lg transition-colors shadow"
@@ -73,6 +76,7 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
           <Plus size={14} />
           <span>활동 추가</span>
         </button>
+        )}
       </div>
 
       {/* 타임라인 그리드 테이블 */}
@@ -112,7 +116,7 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
                 {/* 좌측 활동 라벨 */}
                 <div
                   onClick={() => onEditActivity(act)}
-                  className="p-2 border-r border-dark-border cursor-pointer flex items-center gap-1.5 truncate"
+                  className={`p-2 border-r border-dark-border flex items-center gap-1.5 truncate ${isAuthenticated ? 'cursor-pointer' : ''}`}
                 >
                   <ActivityBadge type={act.type} />
                   <span className="text-xs font-medium text-zinc-200 truncate">{act.name}</span>
@@ -130,8 +134,8 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
                         left: `${(startCol / visibleSemesters.length) * 100}%`,
                         width: `${((Math.max(endCol - startCol + 1, 1)) / visibleSemesters.length) * 100}%`,
                       }}
-                      className={`absolute top-1.5 bottom-1.5 px-2 rounded-md flex items-center justify-center text-[11px] font-semibold text-white shadow-sm border cursor-pointer hover:opacity-90 transition-all ${opt.barBg}`}
-                      title={`${act.name} (클릭하여 수정)`}
+                      className={`absolute top-1.5 bottom-1.5 px-2 rounded-md flex items-center justify-center text-[11px] font-semibold text-white shadow-sm border transition-all ${opt.barBg} ${isAuthenticated ? 'cursor-pointer hover:opacity-90' : ''}`}
+                      title={isAuthenticated ? `${act.name} (클릭하여 수정)` : act.name}
                     >
                       <span className="truncate text-center">{act.name}</span>
                     </div>
@@ -143,7 +147,9 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
 
           {sortedActivities.length === 0 && (
             <div className="p-8 text-center text-xs text-zinc-500">
-              등록된 비교과 활동이 없습니다. '+ 활동 추가' 버튼으로 자격증이나 인턴십을 등록해 보세요.
+              {isAuthenticated
+                ? "등록된 비교과 활동이 없습니다. '+ 활동 추가' 버튼으로 자격증이나 인턴십을 등록해 보세요."
+                : '등록된 비교과 활동이 없습니다.'}
             </div>
           )}
         </div>
