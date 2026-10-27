@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 
 interface ModalProps {
@@ -32,7 +33,8 @@ export const Modal: React.FC<ModalProps> = ({
 
   if (!isOpen) return null;
 
-  return (
+  // body로 포털 렌더링: 헤더처럼 backdrop-filter가 걸린 조상 안에서 열려도 fixed 위치가 뷰포트 기준이 되도록
+  return createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-150">
       <div
         className="fixed inset-0"
@@ -54,7 +56,8 @@ export const Modal: React.FC<ModalProps> = ({
         </div>
         {children}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
