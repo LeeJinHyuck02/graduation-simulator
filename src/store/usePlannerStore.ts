@@ -3,7 +3,7 @@ import { Scenario } from '../types/scenario';
 import { Course } from '../types/course';
 import { Activity } from '../types/activity';
 import { storageAdapter } from '../services/storageAdapter';
-import { DEFAULT_SCENARIOS } from '../constants/defaultData';
+import { DEFAULT_SCENARIOS, ScenarioDuration, getSemesterNames } from '../constants/defaultData';
 import { useAuthStore } from './useAuthStore';
 
 // 잠금 상태(보기 전용)에서는 모든 데이터 변경 액션을 차단
@@ -40,7 +40,8 @@ interface PlannerState {
   deleteActivity: (activityId: string) => void;
 
   // Scenario Actions
-  addScenario: (name: string) => void;
+  addScenario: (name: string, duration: ScenarioDuration, templateId: string | null) => void;
+  deleteScenario: (scenarioId: string) => void;
   importScenarios: (imported: Scenario[]) => void;
   resetToDefault: () => void;
   reconnectSync: () => Promise<void>;
@@ -295,26 +296,69 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
     storageAdapter.saveScenarios(updatedScenarios);
   },
 
-  // 8. 새 시나리오 생성
-  addScenario: (name) => {
+  // 8. 새 시나리오 생성 (4년/5년 학기 구성 + 템플릿 시나리오의 과목·활동 복사)
+  addScenario: (name, duration, templateId) => {
     if (!canEdit()) return;
     const { scenarios } = get();
-    const baseScenario = scenarios[0] || DEFAULT_SCENARIOS[0];
+    const template = templateId ? scenarios.find((s) => s.id === templateId) : undefined;
     const newId = `scenario-${Date.now()}`;
+    const semesterNames = getSemesterNames(duration);
+
+    // 템플릿과 새 시나리오의 학기는 이름으로 대응시킴 (구성 범위 밖의 학기는 제외)
+    const semesters = semesterNames.map((semName, sIdx) => {
+      const sourceSem = template?.semesters.find((s) => s.name === semName);
+      return {
+        id: `sem-${newId}-${sIdx}`,
+        originalIndex: sIdx,
+        name: semName,
+        courses: (sourceSem?.courses || []).map((c, cIdx) => ({
+          ...c,
+          id: `c-${newId}-${sIdx}-${cIdx}`,
+        })),
+      };
+    });
+
+    const indexByTemplateIndex = new Map<number, number>();
+    template?.semesters.forEach((sem) => {
+      const newIndex = semesterNames.indexOf(sem.name);
+      if (newIndex !== -1) indexByTemplateIndex.set(sem.originalIndex, newIndex);
+    });
+    const lastIndex = semesterNames.length - 1;
+
+    const activities: Activity[] = (template?.activities || []).flatMap((act, aIdx) => {
+      const startSem = indexByTemplateIndex.get(act.startSem);
+      if (startSem === undefined) return [];
+      const endSem = indexByTemplateIndex.get(act.endSem) ?? lastIndex;
+      return [{ ...act, id: `act-${newId}-${aIdx}`, startSem, endSem }];
+    });
+
     const newScenario: Scenario = {
       id: newId,
       scenarioName: name,
-      semesters: baseScenario.semesters.map((sem, sIdx) => ({
-        id: `sem-${newId}-${sIdx}`,
-        originalIndex: sem.originalIndex,
-        name: sem.name,
-        courses: [],
-      })),
-      activities: [],
+      semesters,
+      activities,
     };
 
     const updatedScenarios = [...scenarios, newScenario];
     set({ scenarios: updatedScenarios, currentScenarioId: newId });
+    storageAdapter.saveScenarios(updatedScenarios);
+  },
+
+  // 시나리오 삭제 (마지막 남은 시나리오는 삭제 불가)
+  deleteScenario: (scenarioId) => {
+    if (!canEdit()) return;
+    const { scenarios, currentScenarioId } = get();
+    if (scenarios.length <= 1) return;
+    const deletedIndex = scenarios.findIndex((s) => s.id === scenarioId);
+    if (deletedIndex === -1) return;
+
+    const updatedScenarios = scenarios.filter((s) => s.id !== scenarioId);
+    const nextCurrentId =
+      currentScenarioId === scenarioId
+        ? updatedScenarios[Math.min(deletedIndex, updatedScenarios.length - 1)].id
+        : currentScenarioId;
+
+    set({ scenarios: updatedScenarios, currentScenarioId: nextCurrentId });
     storageAdapter.saveScenarios(updatedScenarios);
   },
 

@@ -1,5 +1,24 @@
 import { Scenario } from '../types/scenario';
 
+// 새 시나리오의 학기 구성 (originalIndex = 배열 인덱스)
+// 4년: 3학년 1학기 ~ 4학년 겨울방학, 5년: 5학년 1학기까지 연장
+export type ScenarioDuration = 4 | 5;
+
+const SEMESTER_NAMES_5Y = [
+  '3학년 1학기',
+  '3학년 여름방학',
+  '3학년 2학기',
+  '3학년 겨울방학',
+  '4학년 1학기',
+  '4학년 여름방학',
+  '4학년 2학기',
+  '4학년 겨울방학',
+  '5학년 1학기',
+];
+
+export const getSemesterNames = (duration: ScenarioDuration): string[] =>
+  duration === 5 ? SEMESTER_NAMES_5Y : SEMESTER_NAMES_5Y.slice(0, 8);
+
 export const DEFAULT_SCENARIOS: Scenario[] = [
   // 1. 시나리오: 분배
   {
